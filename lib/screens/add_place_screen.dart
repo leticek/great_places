@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:provider/provider.dart';
 
+import '../providers/place_provider.dart';
 import '../widgets/image_input.dart';
 
 class AddPlaceScreen extends StatefulWidget {
@@ -11,6 +14,34 @@ class AddPlaceScreen extends StatefulWidget {
 
 class _AddPlaceScreenState extends State<AddPlaceScreen> {
   final _titleController = TextEditingController();
+  File _image;
+
+  void _selectImage(File image) {
+    _image = image;
+  }
+
+  void _savePlace() async {
+    if (_titleController.text.isEmpty || _image == null) {
+      await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Error'),
+          content: Text('All fields are required.'),
+          actions: [
+            FlatButton(
+              child: Text('OK'),
+              onPressed: () => Navigator.of(context).pop(),
+            )
+          ],
+        ),
+      );
+      return;
+    }
+
+    Provider.of<Places>(context, listen: false)
+        .addPlace(_titleController.text, _image);
+    Navigator.of(context).pop();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +63,9 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
                       controller: _titleController,
                     ),
                     SizedBox(height: 10),
-                    ImageInputWidget(),
+                    ImageInputWidget(
+                      onImageTaken: _selectImage,
+                    ),
                   ],
                 ),
               ),
@@ -41,7 +74,7 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
           RaisedButton.icon(
             icon: Icon(Icons.add),
             label: Text('Add place'),
-            onPressed: () {},
+            onPressed: _savePlace,
             elevation: 0,
             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
             color: Theme.of(context).accentColor,

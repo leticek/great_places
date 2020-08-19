@@ -16,18 +16,15 @@ class PlaceLocation {
 }
 
 class Place {
-  final String _id;
-  final String _title;
-  final _location;
-  final File _image;
+  final String id;
+  final String title;
+  final PlaceLocation location;
+  final File image;
 
   Place({
-    @required id,
-    @required title,
-    @required location,
-    @required image,
-  })  : _id = id,
-        _title = title,
-        _location = location,
-        _image = image;
+    @required this.id,
+    @required this.title,
+    @required this.location,
+    @required this.image,
+  });
 }
