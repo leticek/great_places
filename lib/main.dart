@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import './providers/place_provider.dart';
+import './screens/places_list_screen.dart';
+import './screens/add_place_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -7,13 +12,19 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+    return ChangeNotifierProvider(
+      create: (context) => Places(),
+      child: MaterialApp(
+        title: 'Places That I Like',
+        theme: ThemeData(
+          primarySwatch: Colors.indigo,
+          accentColor: Colors.amber,
+        ),
+        home: PlacesListScreen(),
+        routes: {
+          AddPlaceScreen.routeName: (context) => AddPlaceScreen(),
+        },
       ),
-      home: null,
     );
   }
 }
